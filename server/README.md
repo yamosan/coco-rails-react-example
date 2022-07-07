@@ -33,16 +33,16 @@ curl "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
 
 ### 3. 認証が機能しているかの確認
 
-**自分に紐づく Post のみ**更新・削除出来るような実装にしている。([実装](./app/controllers/users_controller.rb))
+今回は **自分に紐づく Post のみ** 更新・削除出来るような実装にしている。([実装](./app/controllers/users_controller.rb))
 
-今回は、user1 の idToken を付加している為、post1 のみが削除可能なはずである。これを検証する。
+先程取得したのは user1 の idToken である為、削除可能なのは post1 だけのはず。
 
 ```shell
 export ID_TOKEN=[2でコピーしたidToken]
-# こっちは成功
+# post1の削除は成功して...
 curl http://localhost:3000/posts/1 -X DELETE -H 'Content-Type: application/json' -H "Authorization: Bearer ${ID_TOKEN}"
 
-# こっちは失敗
+# post2の削除は失敗する
 curl http://localhost:3000/posts/2 -X DELETE -H 'Content-Type: application/json' -H "Authorization: Bearer ${ID_TOKEN}"
 {"status":404,"error":"Not Found", ... }
 ```
