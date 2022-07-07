@@ -51,6 +51,6 @@ curl http://localhost:3000/posts/2 -X DELETE -H 'Content-Type: application/json'
 
 # TODO
 
-- [] ユーザー登録
+- [ ] ユーザー登録
   - firebase functions.auth.user().onCreate で同期させる or
   - User.find_by(firebase_uid: \*\*) が既に存在していれば login、存在しなければ signup
