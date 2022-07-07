@@ -1,24 +1,50 @@
-# README
+### 動作確認
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. DB のセットアップ
 
-Things you may want to cover:
+```shell
+rails db:migrate
+rails db:seed
+```
 
-* Ruby version
+```shell
+# それぞれuser1 と post1、user2 と post2が紐付いていることを確認
+rails c
+❯ User.all
+=> ︙
+❯ Post.all
+=> ︙
+```
 
-* System dependencies
+2. 既に作成済みのユーザーの idToken を取得
 
-* Configuration
+```shell
+export API_KEY=[API_KEY] # API_KEYは教えるので聞いて下さい
+curl "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$API_KEY" -H 'Content-Type: application/json' --data-binary '{"email":"user1@example.com","password":"password","returnSecureToken":true}' | jq .idToken
+```
 
-* Database creation
+これをコピーする。
+※ jq コマンドが入ってなかったらインストール or 返ってきた JSON の idToken の部分だけコピー
 
-* Database initialization
+3. 認証が機能しているかの確認
 
-* How to run the test suite
+**自分に紐づく Post のみ**更新・削除出来るような実装にしている。
+今回は、user1 の idToken を付加している為、post1 のみが削除可能なはずである。これを検証する。
 
-* Services (job queues, cache servers, search engines, etc.)
+```shell
+export ID_TOKEN=[2でコピーしたidToken]
+# こっちは成功
+curl http://localhost:3000/posts/1 -X DELETE -H 'Content-Type: application/json' -H "Authorization: Bearer ${ID_TOKEN}"
 
-* Deployment instructions
+# こっちは失敗
+curl http://localhost:3000/posts/2 -X DELETE -H 'Content-Type: application/json' -H "Authorization: Bearer ${ID_TOKEN}"
+{"status":404,"error":"Not Found", ... }
+```
 
-* ...
+---
+
+### TODO
+
+- [] ユーザー登録
+  - firebase functions.auth.user().onCreate で同期させる or
+  - User.find_by(firebase_uid: \*\*) が既に存在していれば login、存在しなければ signup
