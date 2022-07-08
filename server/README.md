@@ -33,7 +33,7 @@ curl "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
 
 ### 3. 認証が機能しているかの確認
 
-今回は **自分に紐づく Post のみ** 更新・削除出来るような実装にしている。([実装](./app/controllers/users_controller.rb))
+今回は **自分に紐づく Post のみ** 更新・削除出来るような実装にしている。([実装](https://github.com/yamosan/coco-rails-react-example/blob/firebase-auth/server/app/controllers/posts_controller.rb))
 
 先程取得したのは user1 の idToken である為、削除可能なのは post1 だけのはず。
 
