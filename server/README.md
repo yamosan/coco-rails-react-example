@@ -63,11 +63,7 @@ export ID_TOKEN=[ここにコピペ]
 
 ### 5. Signin の動作確認
 
-実際にヘッダーに IDToken を付与してリクエストを送ってみる。
-
-<small>※ 本番ではこれを React から実行する(2)が、この検証ではコマンドラインで試す。</small>
-
-このブランチでは、以下のようなルーティングの実装になっている。
+このプロジェクトでは、以下のようなルーティングの実装になっている。
 
 ```sh
 rails routes
@@ -85,7 +81,7 @@ account GET    /account(.:format)   account#show         # ① 自身のアカ�
  signup POST   /signup(.:format)    auth#signup
 ```
 
-実際に認証が機能しているか、① と ② を試してみる。
+実際に、ヘッダーに IDToken を付与した状態でリクエストを送り、① と ② が機能しているかを確かめる。
 
 #### ① GET /account
 
@@ -97,14 +93,14 @@ curl http://localhost:3000/account \
 {"id":1,"name":"user1","age":20,"firebase_uid":"2Sa7adLCuRO3jFssn7xLg7f4aWf1","created_at":"2022-07-23T20:49:39.328Z","updated_at":"2022-07-23T20:49:39.328Z","email":"user1@example.com"}%
 ```
 
-自分の情報が返ってきていれば OK!
+自分のアカウント情報が返ってきていれば OK!
 
 #### ② DELETE /posts/:id
 
-このブランチでは **自身のアカウントに紐づく Post のみ** 削除出来る実装になっている。([実装](./app/controllers/posts_controller.rb))
+このプロジェクトでは **自身のアカウントに紐づく Post のみ** 削除出来る実装になっている。([実装](./app/controllers/posts_controller.rb))
 つまり、自分以外のアカウントに紐づく Post の id を指定しても削除が出来ないことを確認する。
 
-まずは `user1@example.com`(自分) に紐づく Post を作成
+準備として、まずは `user1@example.com`(自分) に紐づく Post を作成
 
 ```sh
 # rails console から作成でも可
