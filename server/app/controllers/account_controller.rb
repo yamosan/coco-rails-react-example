@@ -47,7 +47,6 @@ class AccountController < ApplicationController
   private
 
   def user_params
-    # TODO: email と password も変更可能にする
     params.permit(:name, :age)
   end
 end
