@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :posts
-  get '/profile', to: 'account#show'
-  put '/profile', to: 'account#update'
+
+  get '/account', to: 'account#show'
+  put '/account', to: 'account#update'
+  delete '/account', to: 'account#destroy'
 
   post '/signup', to: 'auth#signup'
 end

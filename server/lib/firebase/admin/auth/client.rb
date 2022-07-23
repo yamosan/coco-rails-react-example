@@ -45,6 +45,13 @@ module Firebase
           @service.set_account_info(request)
         end
 
+        def delete_user(uid:)
+          request = Google::Apis::IdentitytoolkitV3::DeleteAccountRequest.new(
+            local_id: uid
+          )
+          @service.delete_account(request)
+        end
+
         def verify_id_token(id_token)
           @id_token_verifier.verify(id_token)
         end
