@@ -2,12 +2,9 @@
 
 ### 1. serviceAccountKey.json の取得
 
-1. firebase console
-2. プロジェクトの設定
-3. サービスアカウント
-4. 新しい秘密鍵の生成
-5. 生成したファイルを `serviceAccountKey.json` にファイル名を変更
-6. プロジェクトの `config/serviceAccountKey.json` に配置する
+1. firebase console から秘密鍵を取得する (プロジェクトの設定 -> サービスアカウント -> 新しい秘密鍵の生成)
+2. 取得したファイルを `serviceAccountKey.json` にファイル名を変更
+3. プロジェクトの `config/serviceAccountKey.json` に配置する
 
 <small>⚠️ .gitignore によって除外されることを確認する</small>
 
