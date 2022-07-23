@@ -4,14 +4,17 @@ class AuthController < ApplicationController
   def signup
     ActiveRecord::Base.transaction do
       # User.create が失敗したときにトランザクションが機能しない
-      firebase_user = FirebaseAuth.create_user(email: params[:email], password: params[:password])
+      @firebase_user = FirebaseAuth.create_user(email: params[:email], password: params[:password])
       @user = User.create!(
         **user_params,
-        firebase_uid: firebase_user.local_id
+        firebase_uid: @firebase_user.local_id
       )
     end
 
-    render json: @user, status: :created
+    render json: {
+      **@user.attributes,
+      email: @firebase_user.email
+    }, status: :created
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.message }, status: :unprocessable_entity
   rescue Google::Apis::Error, StandardError => e
