@@ -1,12 +1,24 @@
 # 動作確認
 
-### 1. DB のセットアップ
+### 1. serviceAccountKey.json の取得
+
+1. firebase console
+2. プロジェクトの設定
+3. サービスアカウント
+4. 新しい秘密鍵の生成
+5. 生成したファイルを `serviceAccountKey.json` にファイル名を変更
+6. プロジェクトの `config/serviceAccountKey.json` に配置する
+
+<small>⚠️ .gitignore によって除外されることを確認する</small>
+
+### 2. サーバーの起動
 
 ```sh
 rails db:migrate
+rails s
 ```
 
-### 2. Signup の動作確認
+### 3. Signup の動作確認
 
 ```sh
 curl -X POST \
@@ -22,7 +34,7 @@ curl -X POST \
 
 この 2 つを確認してデータが存在していれば OK!
 
-### 3. IDToken の取得
+### 4. IDToken の取得
 
 先程作成した `user1@example.com` でログインし、IDToken を取得する。
 
@@ -52,7 +64,7 @@ curl "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
 export ID_TOKEN=[ここにコピペ]
 ```
 
-### 4. Signin の動作確認
+### 5. Signin の動作確認
 
 実際にヘッダーに IDToken を付与してリクエストを送ってみる。
 
