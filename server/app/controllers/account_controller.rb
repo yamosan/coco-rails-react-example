@@ -1,7 +1,12 @@
+# email を含めようとするとレスポンスが遅くなる。クライアントは ログイン時に Firebase から直接 email を取得できる為、必須ではない。
 class AccountController < ApplicationController
   # GET /profile
   def show
-    render json: @current_user
+    @email = FirebaseAuth.get_user(uid: @current_user.firebase_uid).email
+    render json: {
+      **@current_user.attributes,
+      email: @email
+    }
   end
 
   # PATCH/PUT /profile

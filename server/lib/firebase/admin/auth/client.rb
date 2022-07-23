@@ -20,6 +20,13 @@ module Firebase
           @id_token_verifier = IdTokenVerifier.new(@project_id)
         end
 
+        def get_user(uid:)
+          request = Google::Apis::IdentitytoolkitV3::GetAccountInfoRequest.new(local_id: [uid])
+          response = @service.get_account_info(request)
+
+          response.users[0]
+        end
+
         def create_user(email:, password:)
           request = Google::Apis::IdentitytoolkitV3::SignupNewUserRequest.new(
             email:,
