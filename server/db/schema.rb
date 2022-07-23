@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_07_194354) do
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
+    t.integer "age", null: false
     t.string "firebase_uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
