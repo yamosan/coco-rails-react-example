@@ -1,8 +1,6 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i[ update destroy ]
-  before_action :set_my_post, only: %i[ update destroy ]
-
-  before_action :set_post, only: %i[ show ]
+  before_action :set_my_post, only: %i[update destroy]
+  before_action :set_post, only: %i[show]
 
   # GET /posts
   def index
@@ -18,41 +16,42 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    @my_post = Post.new(**post_params, user_id: @current_user.id)
 
-    if @post.save
-      render json: @post, status: :created, location: @post
+    if @my_post.save
+      render json: @my_post, status: :created, location: @my_post
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: @my_post.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
-      render json: @post
+    if @my_post.update(post_params)
+      render json: @my_post
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: @my_post.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
+    @my_post.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
 
-    def set_my_post
-      @post = Post.user_firebase_uid_is(current_user.firebase_uid).find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:user_id, :title, :content)
-    end
+  def set_my_post
+    @my_post = @current_user.posts.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def post_params
+    params.require(:post).permit(:title, :content)
+  end
 end
