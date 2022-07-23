@@ -36,6 +36,15 @@ module Firebase
           @service.signup_new_user(request)
         end
 
+        def update_user(uid:, email:, password:)
+          request = Google::Apis::IdentitytoolkitV3::SetAccountInfoRequest.new(
+            local_id: uid,
+            email:,
+            password:
+          )
+          @service.set_account_info(request)
+        end
+
         def verify_id_token(id_token)
           @id_token_verifier.verify(id_token)
         end

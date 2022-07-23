@@ -11,11 +11,25 @@ class AccountController < ApplicationController
 
   # PATCH/PUT /profile
   def update
-    if @current_user.update(user_params)
-      render json: @current_user
-    else
-      render json: @current_user.errors, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      @current_user.update!(user_params)
+
+      updated = FirebaseAuth.update_user(
+        uid: @current_user.firebase_uid,
+        email: params[:email],
+        password: params[:password]
+      )
+      @email = updated.email
     end
+
+    render json: {
+      **current_user.attributes,
+      email: @email
+    }
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { errors: e.message }, status: :unprocessable_entity
+  rescue Google::Apis::Error, StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
